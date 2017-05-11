@@ -12,7 +12,9 @@ RUN apk update && \
     swig \
     libxml2-dev \
     libffi-dev \
-    libcap
+    libcap \
+    openjdk8 && \
+    ln -s /usr/lib/jvm/default-jvm/bin/javac /usr/bin/javac
 
 RUN apk add --virtual .build-deps \
     build-base \
