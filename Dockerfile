@@ -22,7 +22,7 @@ RUN apk add --virtual .build-deps \
     linux-headers
 
 RUN git clone --depth=1 \
-    --branch=2.0_beta \
+    --branch=master \
     https://github.com/EmpireProject/Empire.git \
     /empire \
   && rm -rf /empire/.git
@@ -39,6 +39,7 @@ RUN pip install setuptools \
     zlib_wrapper \
     netifaces \
     m2crypto \
+    dropbox \
   && apk del .build-deps
 
 # Add ability to Empire listeners to bind to low-numbered ports without root
