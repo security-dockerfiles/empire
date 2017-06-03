@@ -1,6 +1,6 @@
 ### About
 
-Docker for the [Empire Final](https://github.com/EmpireProject/Empire/tree/master) based on Alpine Linux image.
+Docker for the [Empire post-exploitation framework](https://github.com/EmpireProject/Empire/tree/master) based on Alpine Linux image.
 
 It runs framework as a non-root user.
 
@@ -20,9 +20,3 @@ git clone https://github.com/ilyaglow/docker-empire
 cd docker-empire
 docker build -t my-empire .
 ```
-
-### Limitations
-
-Current version do not support generating `osx/pkg` stagers because it depends on `xar` package that is tough to build successfully from the sources on Alpine.
-
-Pull requests are welcomed!
