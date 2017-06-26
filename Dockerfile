@@ -6,24 +6,24 @@ ENV STAGING_KEY RANDOM
 
 # Reference: https://github.com/EmpireProject/Empire/blob/master/setup/install.sh
 RUN apk update \
-  && apk add --no-cache python \
-                        python-dev \
-                        py-pip \
+  && apk add --no-cache fts-dev \
                         git \
-                        openssl-dev \
-                        swig \
-                        libxml2-dev \
-                        libffi-dev \
                         libcap \
-                        fts-dev \
+                        libffi-dev \
+                        libxml2-dev \
                         openjdk8 \
+                        openssl-dev \
+                        py-pip \
+                        python \
+                        python-dev \
+                        swig \
                         \
   && ln -s /usr/lib/jvm/default-jvm/bin/javac /usr/bin/javac
 
 RUN apk add --virtual .build-deps \
+    autoconf \
     build-base \
-    linux-headers \
-    autoconf
+    linux-headers
 
 # Install xar from sources
 RUN git clone --depth=1 \
@@ -50,19 +50,19 @@ RUN git clone --depth=1 \
   && rm -rf /bomutils
 
 # Install Empire's python dependencies
-RUN pip install setuptools \
-                pycrypto \
-                iptools \
-                pydispatcher \
-                flask \
-                macholib \
-                cryptography \
-                pyopenssl \
-                pyinstaller \
-                zlib_wrapper \
-                netifaces \
-                m2crypto \
+RUN pip install cryptography \
                 dropbox \
+                flask \
+                iptools \
+                m2crypto \
+                macholib \
+                netifaces \
+                pycrypto \
+                pydispatcher \
+                pyinstaller \
+                pyopenssl \
+                setuptools \
+                zlib_wrapper \
                 \
   && rm -rf /root/.cache/pip \
   && apk del .build-deps
