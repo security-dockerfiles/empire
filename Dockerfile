@@ -74,7 +74,7 @@ RUN git clone --depth=1 \
               /empire \
   && rm -rf /empire/.git \
   && apk del git \
-  && rm /var/cache/apk/*
+  && rm -rf /var/cache/apk/*
 
 # Add ability to Empire listeners to bind to low-numbered ports without root
 RUN setcap cap_net_bind_service=+eip /usr/bin/python2.7 \
