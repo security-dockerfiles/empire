@@ -18,12 +18,13 @@ RUN apk update \
                         python-dev \
                         swig \
                         \
-  && ln -s /usr/lib/jvm/default-jvm/bin/javac /usr/bin/javac
-
-RUN apk add --virtual .build-deps \
-    autoconf \
-    build-base \
-    linux-headers
+  && ln -s /usr/lib/jvm/default-jvm/bin/javac /usr/bin/javac \
+  && apk add --virtual .build-deps \
+                        autoconf \
+                        build-base \
+                        linux-headers \
+                        \
+  && rm -rf /var/cache/apk/*
 
 # Install xar from sources
 RUN git clone --depth=1 \
@@ -73,8 +74,7 @@ RUN git clone --depth=1 \
               https://github.com/EmpireProject/Empire.git \
               /empire \
   && rm -rf /empire/.git \
-  && apk del git \
-  && rm -rf /var/cache/apk/*
+  && apk del git
 
 # Add ability to Empire listeners to bind to low-numbered ports without root
 RUN setcap cap_net_bind_service=+eip /usr/bin/python2.7 \
