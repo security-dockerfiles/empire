@@ -1,5 +1,5 @@
 FROM alpine
-LABEL maintainer <contact@ilyaglotov.com>
+LABEL maintainer "contact@ilyaglotov.com"
 
 ENV EMPIRE_USER empire
 ENV STAGING_KEY RANDOM
@@ -24,10 +24,10 @@ RUN apk update \
                         build-base \
                         linux-headers \
                         \
-  && rm -rf /var/cache/apk/*
-
-# Install xar from sources
-RUN git clone --depth=1 \
+  && rm -rf /var/cache/apk/* \
+  \
+  # Install xar from sources
+  && git clone --depth=1 \
               --branch=master \
               https://github.com/mackyle/xar.git \
   && cd /xar/xar \
@@ -36,10 +36,10 @@ RUN git clone --depth=1 \
   && make \
   && make install \
   && cd / \
-  && rm -rf /xar
-
-# Install bomutils from sources
-RUN git clone --depth=1 \
+  && rm -rf /xar \
+  \
+  # Install bomutils from sources
+  && git clone --depth=1 \
               --branch=master \
               https://github.com/hogliux/bomutils.git \
   && cd bomutils \
@@ -48,10 +48,10 @@ RUN git clone --depth=1 \
   && chmod 755 build/bin/mkbom \
   && cp build/bin/mkbom /usr/local/bin/mkbom \
   && cd / \
-  && rm -rf /bomutils
-
-# Install Empire's python dependencies
-RUN pip install cryptography \
+  && rm -rf /bomutils \
+  \
+  # Install Empire's python dependencies
+  && pip install cryptography \
                 dropbox \
                 flask \
                 iptools \
@@ -61,15 +61,15 @@ RUN pip install cryptography \
                 pycrypto \
                 pydispatcher \
                 pyinstaller \
-                pyopenssl \
+                pyopenssl==17.2.0 \
                 setuptools \
                 zlib_wrapper \
                 \
   && rm -rf /root/.cache/pip \
-  && apk del .build-deps
-
-# Clone Empire repository and clean things up
-RUN git clone --depth=1 \
+  && apk del .build-deps \
+  \
+  # Clone Empire repository and clean things up
+  && git clone --depth=1 \
               --branch=master \
               https://github.com/EmpireProject/Empire.git \
               /empire \
