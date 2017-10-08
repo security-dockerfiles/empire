@@ -8,17 +8,27 @@ It runs framework as a non-root user.
 
 ### Usage
 
-Run Empire exposing ports 80 and 443 to host and mounting `/empire/downloads` to host `/home/$USER/mydir`:
+Run Empire exposing ports 80 and 443 to host and map `/empire/downloads` to host's `/home/$USER/mydir/downloads`:
 
 ```
-docker run -it -p 80:80 -p 443:443 -v /home/$USER/mydir:/empire/downloads ilyaglow/empire
+docker run -it -p 80:80 -p 443:443 -v /home/$USER/mydir:/data ilyaglow/empire
 ```
 
+### Containerize your current setup
 
-Or you can build it on your own:
+You can specify the following environment variables:
+* `EMPIRE_API_PASSWORD`
+* `EMPIRE_API_PERMANENT_TOKEN`
+* `EMPIRE_API_USERNAME`
+* `EMPIRE_DB_LOCATION`
+* `EMPIRE_IP_BLACKLIST`
+* `EMPIRE_IP_WHITELIST`
+* `EMPIRE_CHAIN_LOCATION`
+* `EMPIRE_PKEY_LOCATION`
+
+#### How to use an existing database
 
 ```
-git clone https://github.com/ilyaglow/docker-empire
-cd docker-empire
-docker build -t my-empire .
+docker run -it -p 80:80 -p 443:443 -p 8080:8080 -v /your/path:/data -e EMPIRE_DB_LOCATION=/data/empire.db empire
 ```
+
