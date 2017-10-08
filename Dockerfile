@@ -2,7 +2,6 @@ FROM alpine
 LABEL maintainer "contact@ilyaglotov.com"
 
 ENV EMPIRE_USER empire
-ENV STAGING_KEY RANDOM
 
 # Reference: https://github.com/EmpireProject/Empire/blob/master/setup/install.sh
 RUN apk update \
@@ -12,6 +11,7 @@ RUN apk update \
                         libffi-dev \
                         libxml2-dev \
                         openjdk8 \
+                        openssl \
                         openssl-dev \
                         py-pip \
                         python \
@@ -81,15 +81,18 @@ RUN setcap cap_net_bind_service=+eip /usr/bin/python2.7 \
   && adduser -D $EMPIRE_USER \
   && chown -R $EMPIRE_USER /empire
 
+COPY entrypoint.sh /tmp/entrypoint.sh
+RUN chmod +x /tmp/entrypoint.sh
+
+RUN mkdir -p /data/downloads \
+  && ln -s /data/downloads /empire/downloads \
+  && chown -R $EMPIRE_USER /data
+VOLUME /data
+
 USER $EMPIRE_USER
 
-# Setup database
-RUN cd /empire/setup \
-  && python setup_database.py
-
-RUN mkdir /empire/downloads
-VOLUME /empire/downloads
 EXPOSE 80 443 1337 8080
+
 WORKDIR /empire
 
-CMD ["python", "./empire"]
+ENTRYPOINT ["/tmp/entrypoint.sh"]
