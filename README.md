@@ -29,6 +29,6 @@ You can specify the following environment variables:
 #### How to use an existing database
 
 ```
-docker run -it -p 80:80 -p 443:443 -p 8080:8080 -v /your/path:/data -e EMPIRE_DB_LOCATION=/data/empire.db empire
+docker run -it -p 80:80 -p 443:443 -p 8080:8080 -v /your/path:/data -e EMPIRE_DB_LOCATION=/data/empire.db ilyaglow/empire
 ```
 
