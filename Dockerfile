@@ -1,5 +1,5 @@
-FROM alpine
-LABEL maintainer "contact@ilyaglotov.com"
+FROM mcr.microsoft.com/powershell:preview-alpine-3.8
+LABEL maintainer "Ilya Glotov <contact@ilyaglotov.com>"
 
 ENV EMPIRE_USER empire
 
@@ -61,8 +61,11 @@ RUN apk update \
                 pycrypto \
                 pydispatcher \
                 pyinstaller \
+                pyminifier \
                 pyopenssl==17.2.0 \
                 setuptools \
+                xlrd \
+                xlutils \
                 zlib_wrapper \
                 \
   && rm -rf /root/.cache/pip \
@@ -74,20 +77,28 @@ RUN apk update \
               https://github.com/EmpireProject/Empire.git \
               /empire \
   && rm -rf /empire/.git \
-  && apk del git
-
-# Add ability to Empire listeners to bind to low-numbered ports without root
-RUN setcap cap_net_bind_service=+eip /usr/bin/python2.7 \
+  && apk del git \
+  \
+  # Add ability to Empire listeners to bind to low-numbered ports without root
+  && setcap cap_net_bind_service=+eip /usr/bin/python2.7 \
   && adduser -D $EMPIRE_USER \
-  && chown -R $EMPIRE_USER /empire
+  && chown -R $EMPIRE_USER /empire \
+  \
+  # Put downloads to a volume
+  && mkdir -p /data/downloads \
+  && ln -s /data/downloads /empire/downloads \
+  && chown -R $EMPIRE_USER /data \
+  \
+  # Add powershell modules to user modules folder
+  && mkdir -p /home/empire/.local/share/powershell/Modules \
+  && ln -s /empire/lib/powershell/Invoke-Obfuscation \
+           /home/empire/.local/share/powershell/Modules/Invoke-Obfuscation \
+  && chmod -R +x /opt/microsoft/powershell/
+
+VOLUME /data
 
 COPY entrypoint.sh /tmp/entrypoint.sh
 RUN chmod +x /tmp/entrypoint.sh
-
-RUN mkdir -p /data/downloads \
-  && ln -s /data/downloads /empire/downloads \
-  && chown -R $EMPIRE_USER /data
-VOLUME /data
 
 USER $EMPIRE_USER
 
